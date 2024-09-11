@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Fetch</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        .copy-message {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            background-color: #269bd1;
+            color: white;
+            border-radius: 5px;
+            z-index: 1000;
+        }
+    </style>
+    <script>
+        function formatAmount(amount) {
+            const formattedAmount = new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            }).format(amount);
+
+            return formattedAmount.replace('Rp ', 'Rp ').replace(/\./g, ',');
+        }
+
+        function fetchData() {
+            fetch('/data')
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.getElementById('data-table-body');
+                    tableBody.innerHTML = ''; // Clear existing rows
+                    data.forEach((row, index) => {
+                        const rowElement = document.createElement('tr');
+                        rowElement.innerHTML = `
+                            <td class="row-no">${index + 1}</td> <!-- Row number -->
+                            <td>${row.date}</td>
+                            <td>${row.type}</td>
+                            <td>${row.orderid}</td>
+                            <td>${row.src_acc_name}</td>
+                            <td>${formatAmount(row.total)}</td>
+                        `;
+                        rowElement.querySelector('.row-no').addEventListener('click', () => copyRowData(index));
+                        tableBody.appendChild(rowElement);
+                    });
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        }
+
+        function startAutoFetch(interval) {
+            clearInterval(window.autoFetchInterval);
+            window.autoFetchInterval = setInterval(fetchData, interval * 1000);
+        }
+
+        function toggleAutoFetch() {
+            const autoFetch = document.getElementById('autoFetch').checked;
+            const interval = document.getElementById('interval').value;
+
+            fetch('/update_settings', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ 
+                    url: document.getElementById('url').value,
+                    autoFetch, 
+                    interval 
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (autoFetch) {
+                    startAutoFetch(interval);
+                } else {
+                    clearInterval(window.autoFetchInterval);
+                }
+            });
+        }
+
+        function showCopyMessage() {
+            const messageElement = document.getElementById('copy-message');
+            messageElement.style.display = 'block';
+            setTimeout(() => {
+                messageElement.style.display = 'none';
+            }, 1000); // Hide message after 1 second
+        }
+
+        function copyRowData(startIndex) {
+            const tableBody = document.getElementById('data-table-body');
+            const rows = Array.from(tableBody.querySelectorAll('tr')).slice(startIndex);
+            let copyText = '';
+
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                const srcAccName = cells[4].textContent.trim();
+                const total = cells[5].textContent.trim().replace(/[^0-9.-]/g, ''); // Remove currency formatting
+
+                // Add formatting based on Type
+                if (cells[2].textContent.trim() === 'DB') {
+                    copyText += `${srcAccName}\t\t -${total}\n`;
+                } else {
+                    copyText += `${srcAccName}\t${total}\n`;
+                }
+            });
+
+            // Copy to clipboard
+            navigator.clipboard.writeText(copyText)
+                .then(() => {
+                    showCopyMessage(); // Show message when copy is done
+                })
+                .catch(err => console.error('Failed to copy: ', err));
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchData(); // Initial fetch
+            fetch('/update_settings') // Fetch initial settings
+                .then(response => response.json())
+                .then(data => {
+                    const autoFetch = data.autoFetch || false;
+                    const interval = data.interval || 10;
+                    document.getElementById('autoFetch').checked = autoFetch;
+                    document.getElementById('interval').value = interval;
+                    document.getElementById('url').value = data.url || '';
+
+                    if (autoFetch) {
+                        startAutoFetch(interval);
+                    }
+                });
+
+            document.getElementById('autoFetch').addEventListener('change', toggleAutoFetch);
+            document.getElementById('interval').addEventListener('input', toggleAutoFetch);
+            document.getElementById('url').addEventListener('input', toggleAutoFetch);
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Configuration</h1>
+    </header>
+    <div class="container">
+        <div class="alert" id="alert" style="display: none;"></div>
+
+        <div class="form-group">
+            <label for="url">API URL:</label>
+            <input type="text" id="url" name="url" required>
+        </div>
+
+        <div class="form-group">
+            <label class="switch">
+                <input type="checkbox" id="autoFetch" name="autoFetch">
+                <span class="slider round"></span>
+            </label>
+            <label for="autoFetch">Enable Auto-Fetch:</label>
+        </div>
+
+        <div class="form-group">
+            <label for="interval">Auto Refresh (seconds):</label>
+            <input type="number" id="interval" name="interval" min="1" value="10">
+        </div>
+
+        <h2>Fetched Data</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th class="row-no">No</th> <!-- Row number header -->
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Order ID</th>
+                    <th>Account Name</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody id="data-table-body">
+                <!-- Rows will be populated by JavaScript -->
+            </tbody>
+        </table>
+
+        <!-- Copy message element -->
+        <div id="copy-message" class="copy-message">Copied to clipboard!</div>
+    </div>
+</body>
+</html>
