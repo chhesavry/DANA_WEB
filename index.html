@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Dana Auto Process Bot x Xavi3r</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+</head>
+<body>
+    <div id="loading-spinner" class="spinner">
+        <div class="loader">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+
+    <div class="container">
+        <nav>
+            <ul>
+                <li><a href="#" class="logo">
+                    <img src="logo.png" alt="Logo">
+                    <span class="nav-item">DANA BOT</span>
+                </a></li>
+                <li>
+                    <a href="#">
+                        <span class="nav-item">List</span>
+                    </a>
+                    <ul id="file-list">
+                        <!-- List of JSON files will be injected here -->
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+
+        <section class="main">
+            <div class="main-top">
+                <h1>DANA BOT</h1>
+            </div>
+
+            <section class="attendance">
+                <div class="filter-controls">
+                    <select id="type-filter">
+                        <option value="">Select Type</option>
+                        <option value="CR">CR</option>
+                        <option value="DB">DB</option>
+                    </select>
+                    <input type="text" id="source-account-filter" placeholder="Source Account">
+                    <input type="text" id="user-name-filter" placeholder="User Name">
+                    <select id="status-filter">
+                        <option value="">Select Status</option>
+                        <option value="Approved">Approved</option>
+                        <option value="Pending">Pending</option>
+                    </select>
+                    <select id="row-count-filter">
+                        <option value="20">20</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                        <option value="200">200</option>
+                        <option value="All">All</option>
+                    </select>
+                    <button id="search-button">
+                        <i class="fas fa-search"></i> Search
+                    </button>
+                    <button id="refresh-button">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+
+                <div class="attendance-list">
+                    <h1>Transaction List</h1>
+                    
+                    <!-- Totals Display -->
+                    <div id="totals-display">
+                        <strong>Total CR: <span id="total-cr" class="total-cr">0</span></strong> |
+                        <strong>Total DB: <span id="total-db" class="total-db">0</span></strong>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Index</th>
+                                    <th>Date</th>
+                                    <th>Type</th>
+                                    <th>Order ID</th>
+                                    <th>Source Account</th>
+                                    <th>Total</th>
+                                    <th>User Name</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="attendance-data">
+                                <!-- Data will be injected here by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </section>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="edit-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="close-modal">&times;</span>
+            <h2>Edit Transaction</h2>
+            
+            <label for="edit-date">Date:</label>
+            <input type="text" id="edit-date" />
+            
+            <label for="edit-type">Type:</label>
+            <select id="edit-type">
+                <option value="">Select Type</option>
+                <option value="CR">CR</option>
+                <option value="DB">DB</option>
+            </select>
+            
+            <label for="edit-order-id">Order ID:</label>
+            <input type="text" id="edit-order-id" />
+            
+            <label for="edit-source-account">Source Account:</label>
+            <input type="text" id="edit-source-account" />
+            
+            <label for="edit-total">Total:</label>
+            <input type="text" id="edit-total" />
+            
+            <label for="edit-user-name">User Name:</label>
+            <input type="text" id="edit-user-name" />
+            
+            <label for="edit-status">Status:</label>
+            <select id="edit-status">
+                <option value="Approved">Approved</option>
+                <option value="Pending">Pending</option>
+            </select>
+            
+            <button id="save-changes">Save Changes</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

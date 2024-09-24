@@ -1,0 +1,325 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  outline: none;
+  border: none;
+  text-decoration: none;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  background: rgb(226, 226, 226);
+}
+
+nav {
+  position: sticky;
+  top: 0;
+  bottom: 0;
+  height: 100vh;
+  left: 0;
+  width: 90px;
+  background: #fff;
+  overflow: hidden;
+  transition: 1s;
+}
+
+nav:hover {
+  width: 280px;
+  transition: 1s;
+}
+
+.logo {
+  text-align: center;
+  display: flex;
+  margin: 10px 0 0 10px;
+  padding-bottom: 3rem;
+}
+
+.logo img {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+}
+
+.logo span {
+  font-weight: bold;
+  padding-left: 15px;
+  font-size: 18px;
+  text-transform: uppercase;
+}
+
+a {
+  position: relative;
+  width: 280px;
+  font-size: 14px;
+  color: rgb(85, 83, 83);
+  display: table;
+  padding: 10px;
+}
+
+a:hover {
+  background: #eee;
+}
+
+.container {
+  display: flex;
+  height: 100vh; /* Full height */
+}
+
+/* Main Section */
+.main {
+  position: relative;
+  padding: 20px;
+  width: 100%;
+  overflow: hidden; /* Prevent overflow */
+}
+
+/* Attendance List Section */
+.attendance {
+  margin-top: 20px;
+  text-transform: capitalize;
+  height: calc(100vh - 100px); /* Adjust to fit your design */
+}
+
+.attendance-list {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+  height: 100%; /* Full height */
+}
+
+.table-container {
+  max-height: calc(100% - 50px); /* Adjust for header space */
+  overflow-y: auto; /* Enable vertical scrolling */
+}
+
+.table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+table thead {
+  position: sticky; /* Make the header sticky */
+  top: 0; /* Position it at the top */
+  background: #003366; /* Match the header background */
+  z-index: 1; /* Ensure the header stays above the content */
+  color: white; /* Set text color to white */
+}
+
+
+.table th,
+.table td {
+  padding: 12px 15px;
+}
+
+.table tbody tr {
+  cursor: pointer; /* Change the cursor to pointer */
+}
+
+.table tbody tr {
+  border-bottom: 1px solid #ddd;
+  cursor: pointer; /* Change the cursor to pointer */
+}
+/* Hover effect for table rows */
+.table tbody tr:hover {
+  background: #d9edf7; /* Light blue background on hover */
+}
+
+/* Filter Controls */
+.filter-controls {
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.filter-controls select,
+.filter-controls input {
+  padding: 10px;
+  margin-right: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  width: 150px; /* Adjust width as needed */
+}
+
+.filter-controls input {
+  flex-grow: 1;
+}
+
+.filter-controls button {
+  background: #0069d9;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 10px;
+  transition: background 0.3s;
+}
+
+.filter-controls button:hover {
+  background: #28a745; /* Darker green on hover */
+}
+
+.spinner {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  z-index: 9999;
+  display: none; /* Hide by default */
+  justify-content: center;
+  align-items: center;
+}
+
+.loader {
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+}
+
+.loader div {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #3498db;
+  animation: loading 0.6s infinite alternate;
+}
+
+.loader div:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.loader div:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes loading {
+  0% {
+    transform: translateY(0);
+    background: #3498db;
+  }
+  100% {
+    transform: translateY(-20px);
+    background: #8e44ad;
+  }
+}
+
+/* Modal Background */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1000; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgba(0, 0, 0, 0.5); /* Black with opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  border-radius: 10px; /* Rounded corners */
+  width: 90%; /* Could be more or less, depending on screen size */
+  max-width: 500px; /* Limit maximum width */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
+}
+
+/* Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Input Fields */
+.modal input,
+.modal select {
+  width: calc(100% - 20px); /* Full width minus padding */
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 5px; /* Rounded corners for input fields */
+}
+
+/* Save Button */
+.save-button {
+  background-color: #28a745; /* Green background */
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.save-button:hover {
+  background-color: #218838; /* Darker green on hover */
+}
+
+/* Modal Title */
+.modal-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 20px; /* Space below title */
+}
+#save-changes {
+  background-color: #28a745; /* Green background */
+  color: white; /* White text */
+  padding: 10px 20px; /* Padding for better spacing */
+  border: none; /* Remove default border */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+  font-size: 16px; /* Font size */
+  transition: background-color 0.3s, transform 0.2s; /* Smooth transition */
+}
+
+#save-changes:hover {
+  background-color: #218838; /* Darker green on hover */
+  transform: translateY(-2px); /* Slight lift effect */
+}
+
+#save-changes:active {
+  background-color: #1e7e34; /* Even darker green when clicked */
+  transform: translateY(0); /* Reset lift effect */
+}
+/* Total Display Styles */
+#totals-display {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0;
+  font-size: 1.2em; /* Adjust the font size as needed */
+  font-weight: bold;
+}
+.total-cr {
+  color: green; /* Green for CR */
+}
+.total-db {
+  color: red; /* Red for DB */
+}
+/* Highlight table rows where type is DB */
+.table tbody tr.db-row {
+  background-color: #fcefef; /* Light red background */
+}
+/* Highlight table rows where type is CR */
+.table tbody tr.cr-row {
+  background-color: #f1fcef; /* Light green background */
+}
